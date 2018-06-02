@@ -1,0 +1,11 @@
+<canvas id="backgroundCanvas" style="position: absolute; z-index:-1;"></canvas>
+<script src="background-animation.js"></script>
+<script type="text/javascript">
+    let anim = new GrislyGrotto.BackgroundAnimation()
+    anim.entityCount = 50
+    anim.initialise(
+            document.getElementById('backgroundCanvas'), 
+            'black', 
+            'gold', 
+            'grey')
+</script>
