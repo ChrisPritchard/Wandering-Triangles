@@ -6,7 +6,7 @@ Inspired by some of the artwork for Deus Ex Human Revolution, and later Mankind 
 
 Below is a sample of how it looks and how it should be used (its just the one file plus script to configure it). The sample page has a control which allows the animation colours to be altered, or the wandering to be 'paused' which can be useful for, by example, editor pages where it might serve as a distraction.
 
-[Sample html file](./sample.html)
+[Sample html file](https://chrispritchard.github.io/Wandering-Triangles/sample.html)
 
 Aside from colours and whether or not the animation is enabled, there are other settings that can be seen in that 'baseSettings' function of [wandering-triangles.js](./wandering-triangles.js), at the top of the file.
 
