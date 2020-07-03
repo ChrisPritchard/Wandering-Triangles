@@ -1,11 +1,74 @@
-<canvas id="backgroundCanvas" style="position: absolute; z-index:-1;"></canvas>
-<script src="background-animation.js"></script>
-<script type="text/javascript">
-    let anim = new GrislyGrotto.BackgroundAnimation()
-    anim.entityCount = 50
-    anim.initialise(
-            document.getElementById('backgroundCanvas'), 
-            'black', 
-            'gold', 
-            'grey')
-</script>
+<html>
+<head>
+<style>
+body {
+    padding: 0;
+    margin: 0;
+}
+#backgroundCanvas {
+    position: fixed; z-index:-1;
+}
+#animationControl {
+    width: 300px;
+    height: 110px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    color: white;
+    padding: 20px;
+}
+#animationControl label {
+    display: block;
+    margin-bottom: 5px;
+}
+</style>
+</head>
+<body>
+    <canvas id="backgroundCanvas" style=""></canvas>
+
+    <div id="animationControl">
+        <label><input type="checkbox" id="enabled" checked="checked" />&nbsp;Enabled</label>
+        <label><input type="color" id="backgroundColour" value="#000000" />&nbsp;Background Colour</label>
+        <label><input type="color" id="primaryColour" value="#FFD700" />&nbsp;Primary Colour</label>
+        <label><input type="color" id="secondaryColour" value="#808080" />&nbsp;Secondary Colour</label>
+    </div>
+
+    <script src="wandering-triangles.js"></script>
+    <script type="text/javascript">
+        var canvas = document.getElementById("backgroundCanvas");
+
+        function onResize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        onResize();
+        window.onresize = onResize;
+
+        var animSettings = wanderingTriangles.baseSettings();
+        animSettings.backgroundColour = "black";
+        animSettings.primaryColour = "gold";
+        animSettings.secondaryColour = "gray";
+        var instance = wanderingTriangles.init(canvas, animSettings);
+
+        document.getElementById("enabled").onchange = function() {
+            instance.enabled = this.checked;
+        };
+
+        document.getElementById("backgroundColour").onchange = function() {
+            instance.settings.backgroundColour = this.value;
+        };
+
+        document.getElementById("primaryColour").onchange = function() {
+            instance.settings.primaryColour = this.value;
+        };
+
+        document.getElementById("secondaryColour").onchange = function() {
+            instance.settings.secondaryColour = this.value;
+        };
+    </script>
+</body>
+</html>
