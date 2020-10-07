@@ -4,17 +4,27 @@ let wanderingTriangles = {}
 wanderingTriangles.baseSettings = function() {
     return {
         fadeAlpha: 0.1,
-        framerate: 18,
-        triangleSize: 15,
-        triangleDensity: 0.5, // how many triangles per triangleSize columns of the canvas
+        framerate: 1,
+        triangleSize: 50,
+        triangleDensity: 1, // how many triangles per triangleSize columns of the canvas
         chanceOfJump: 0.005,
         chanceOfSecondaryColour: 0.25,
         chanceOfFill: 0.5,
         backgroundColour: "black",
         primaryColour: "white",
         secondaryColour: "gray",
+        directionBias: 0
     };
 }
+
+// direction bias:
+// each triangle go shift to one of three directions, so 0.33 chance
+// if a direction is biased, then it gets a larger chance, say 0.5, while the others get reduced, 0.25
+// also, adjacent dirs get a bias, say 0.1
+// how would this work? bias is a number, say 0.2, adding that to bias dir and subtracting 0.1 from others
+// adjecent dir is a bias, say 0.2 as well, adding that to adjacents and subtracting 0.1 from others
+// for left/right multi transforms, could just be random for each (e.g. right-up, right-down and right-level being equally likely if going right)
+//   however, what do these map to exactly? are they more up/down proper, but shape change?
 
 wanderingTriangles.init = function(canvas, settings) {
 
@@ -154,16 +164,16 @@ wanderingTriangles.nextTriangleFromLeft = function(triangle, triangleSize) {
     if (random < 0.1) {
         triangle.x += triangleSize;
         triangle.y -= triangleSize;
-        triangle.type = 3; // right
+        triangle.type = 3; // right up
     }
     else if (random < 0.4) {
         triangle.x += triangleSize;
         triangle.y += triangleSize;
-        triangle.type = 3; // right
+        triangle.type = 3; // right down
     }
     else if (random < 0.7) {
         triangle.x += triangleSize * 2;
-        triangle.type = 3; // right
+        triangle.type = 3; // right level
     }
     else
         triangle.type = 0; // up
@@ -175,16 +185,16 @@ wanderingTriangles.nextTriangleFromRight = function(triangle, triangleSize) {
     if (random < 0.1) {
         triangle.x -= triangleSize;
         triangle.y -= triangleSize;
-        triangle.type = 2; // left
+        triangle.type = 2; // left up
     }
     else if (random < 0.4) {
         triangle.x -= triangleSize;
         triangle.y += triangleSize;
-        triangle.type = 2; // left
+        triangle.type = 2; // left down
     }
     else if (random < 0.7) {
         triangle.x -= triangleSize * 2;
-        triangle.type = 2; // left
+        triangle.type = 2; // left level
     }
     else
         triangle.type = 0; // up
