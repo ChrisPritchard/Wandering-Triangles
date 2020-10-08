@@ -11,7 +11,7 @@ body {
 }
 #animationControl {
     width: 320px;
-    height: 130px;
+    height: 150px;
     margin: 0;
     position: absolute;
     top: 50%;
@@ -41,6 +41,12 @@ a.github-link, a.github-link:visited {
         <label><input type="color" id="backgroundColour" value="#000000" />&nbsp;Background Colour</label>
         <label><input type="color" id="primaryColour" value="#FFD700" />&nbsp;Primary Colour</label>
         <label><input type="color" id="secondaryColour" value="#808080" />&nbsp;Secondary Colour</label>
+        <label><select id="directionBias">
+            <option value="0">Up</option>
+            <option selected value="1">Down</option>
+            <option value="2">Left</option>
+            <option value="3">Right</option>
+        </select>&nbsp;Direction</label>
         <a class="github-link" href="https://github.com/ChrisPritchard/Wandering-Triangles">https://github.com/ChrisPritchard/Wandering-Triangles</a>
     </div>
 
@@ -75,6 +81,10 @@ a.github-link, a.github-link:visited {
 
         document.getElementById("secondaryColour").onchange = function() {
             instance.settings.secondaryColour = this.value;
+        };
+
+        document.getElementById("directionBias").onchange = function() {
+            instance.settings.directionBias = this.value;
         };
     </script>
 </body>

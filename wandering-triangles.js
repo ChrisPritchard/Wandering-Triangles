@@ -4,7 +4,7 @@ let wanderingTriangles = {}
 wanderingTriangles.baseSettings = function() {
     return {
         fadeAlpha: 0.1,
-        framerate: 18,
+        framerate: 50,
         triangleSize: 15,
         triangleDensity: 0.5, // how many triangles per triangleSize columns of the canvas
         chanceOfJump: 0.005,
@@ -13,7 +13,7 @@ wanderingTriangles.baseSettings = function() {
         backgroundColour: "black",
         primaryColour: "white",
         secondaryColour: "gray",
-        directionBias: 3
+        directionBias: 1
     };
 }
 
