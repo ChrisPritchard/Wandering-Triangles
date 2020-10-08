@@ -74,7 +74,7 @@ wanderingTriangles.getDirectionOdds = function(directionBias) {
         0.33,
     ];
     for (var i = 0; i <= 3; i++) {
-        if (i === directionBias) {
+        if (i == directionBias) {
             dirOdds[i] += 0.2;
         } else {
             dirOdds[i] -= 0.1;
