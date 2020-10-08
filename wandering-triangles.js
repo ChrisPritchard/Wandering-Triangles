@@ -4,27 +4,18 @@ let wanderingTriangles = {}
 wanderingTriangles.baseSettings = function() {
     return {
         fadeAlpha: 0.1,
-        framerate: 1,
-        triangleSize: 50,
-        triangleDensity: 1, // how many triangles per triangleSize columns of the canvas
+        framerate: 18,
+        triangleSize: 15,
+        triangleDensity: 0.5, // how many triangles per triangleSize columns of the canvas
         chanceOfJump: 0.005,
         chanceOfSecondaryColour: 0.25,
         chanceOfFill: 0.5,
         backgroundColour: "black",
         primaryColour: "white",
         secondaryColour: "gray",
-        directionBias: 0
+        directionBias: 3
     };
 }
-
-// direction bias:
-// each triangle go shift to one of three directions, so 0.33 chance
-// if a direction is biased, then it gets a larger chance, say 0.5, while the others get reduced, 0.25
-// also, adjacent dirs get a bias, say 0.1
-// how would this work? bias is a number, say 0.2, adding that to bias dir and subtracting 0.1 from others
-// adjecent dir is a bias, say 0.2 as well, adding that to adjacents and subtracting 0.1 from others
-// for left/right multi transforms, could just be random for each (e.g. right-up, right-down and right-level being equally likely if going right)
-//   however, what do these map to exactly? are they more up/down proper, but shape change?
 
 wanderingTriangles.init = function(canvas, settings) {
 
@@ -75,19 +66,37 @@ wanderingTriangles.draw = function(instance) {
     }
 };
 
+wanderingTriangles.getDirectionOdds = function(directionBias) {
+    var dirOdds = [
+        0.33,
+        0.33,
+        0.33,
+        0.33,
+    ];
+    for (var i = 0; i <= 3; i++) {
+        if (i === directionBias) {
+            dirOdds[i] += 0.2;
+        } else {
+            dirOdds[i] -= 0.1;
+        }
+    }
+    return dirOdds;
+}
+
 wanderingTriangles.updateTriangle = function(instance, triangle) {
 
     settings = instance.settings;
     canvas = instance.context.canvas;
+    dirOdds = this.getDirectionOdds(settings.directionBias);
 
     if (triangle.type === 0)
-        triangle = this.nextTriangleFromUp(triangle, settings.triangleSize);
+        triangle = this.nextTriangleFromUp(triangle, settings.triangleSize, dirOdds);
     else if (triangle.type === 1)
-        triangle = this.nextTriangleFromDown(triangle, settings.triangleSize);
+        triangle = this.nextTriangleFromDown(triangle, settings.triangleSize, dirOdds);
     else if (triangle.type === 2)
-        triangle = this.nextTriangleFromLeft(triangle, settings.triangleSize);
+        triangle = this.nextTriangleFromLeft(triangle, settings.triangleSize, dirOdds);
     else
-        triangle = this.nextTriangleFromRight(triangle, settings.triangleSize);
+        triangle = this.nextTriangleFromRight(triangle, settings.triangleSize, dirOdds);
 
     let offscreen = 
         triangle.x < -settings.triangleSize ||
@@ -133,11 +142,11 @@ wanderingTriangles.drawTriangle = function(instance, triangle) {
         context.fill();
 };
 
-wanderingTriangles.nextTriangleFromUp = function(triangle, triangleSize) {
+wanderingTriangles.nextTriangleFromUp = function(triangle, triangleSize, dirOdds) {
     var random = Math.random();
-    if (random < 0.2)
+    if (random < dirOdds[3])
         triangle.type = 3; // right
-    else if (random < 0.4)
+    else if (random < dirOdds[3] + dirOdds[2])
         triangle.type = 2; // left
     else {
         triangle.y += triangleSize * 2;
@@ -146,32 +155,32 @@ wanderingTriangles.nextTriangleFromUp = function(triangle, triangleSize) {
     return triangle;
 };
 
-wanderingTriangles.nextTriangleFromDown = function(triangle, triangleSize) {
+wanderingTriangles.nextTriangleFromDown = function(triangle, triangleSize, dirOdds) {
     var random = Math.random();
-    if (random < 0.2) {
+    if (random < dirOdds[0]) {
         triangle.y -= triangleSize * 2;
         triangle.type = 0; // up
     }
-    else if (random < 0.6)
+    else if (random < dirOdds[0] + dirOdds[2])
         triangle.type = 2; // left
     else
         triangle.type = 3; // right
     return triangle;
 };
            
-wanderingTriangles.nextTriangleFromLeft = function(triangle, triangleSize) {
+wanderingTriangles.nextTriangleFromLeft = function(triangle, triangleSize, dirOdds) {
     var random = Math.random();
-    if (random < 0.1) {
+    if (random < dirOdds[0]) {
         triangle.x += triangleSize;
         triangle.y -= triangleSize;
         triangle.type = 3; // right up
     }
-    else if (random < 0.4) {
+    else if (random < dirOdds[0] + dirOdds[1]) {
         triangle.x += triangleSize;
         triangle.y += triangleSize;
         triangle.type = 3; // right down
     }
-    else if (random < 0.7) {
+    else if (random < dirOdds[0] + dirOdds[1] + dirOdds[3]) {
         triangle.x += triangleSize * 2;
         triangle.type = 3; // right level
     }
@@ -180,19 +189,19 @@ wanderingTriangles.nextTriangleFromLeft = function(triangle, triangleSize) {
     return triangle;
 };
 
-wanderingTriangles.nextTriangleFromRight = function(triangle, triangleSize) {
+wanderingTriangles.nextTriangleFromRight = function(triangle, triangleSize, dirOdds) {
     var random = Math.random();
-    if (random < 0.1) {
+    if (random <  dirOdds[0]) {
         triangle.x -= triangleSize;
         triangle.y -= triangleSize;
         triangle.type = 2; // left up
     }
-    else if (random < 0.4) {
+    else if (random < dirOdds[0] + dirOdds[1]) {
         triangle.x -= triangleSize;
         triangle.y += triangleSize;
         triangle.type = 2; // left down
     }
-    else if (random < 0.7) {
+    else if (random < dirOdds[0] + dirOdds[1] + dirOdds[2]) {
         triangle.x -= triangleSize * 2;
         triangle.type = 2; // left level
     }
