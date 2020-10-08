@@ -170,43 +170,55 @@ wanderingTriangles.nextTriangleFromDown = function(triangle, triangleSize, dirOd
            
 wanderingTriangles.nextTriangleFromLeft = function(triangle, triangleSize, dirOdds) {
     var random = Math.random();
-    if (random < dirOdds[0]) {
+    var chance = dirOdds[0]/2+dirOdds[3]/3;
+    if (random < chance) {
         triangle.x += triangleSize;
         triangle.y -= triangleSize;
         triangle.type = 3; // right up
+        return triangle;
     }
-    else if (random < dirOdds[0] + dirOdds[1]) {
+    chance += dirOdds[1]/2+dirOdds[3]/3;
+    if (random < chance) {
         triangle.x += triangleSize;
         triangle.y += triangleSize;
         triangle.type = 3; // right down
+        return triangle;
     }
-    else if (random < dirOdds[0] + dirOdds[1] + dirOdds[3]) {
+    chance += dirOdds[3]/2+dirOdds[3]/3;
+    if (random < chance) {
         triangle.x += triangleSize * 2;
         triangle.type = 3; // right level
+        return triangle;
     }
-    else
-        triangle.type = 0; // up
+    
+    triangle.type = 0; // up
     return triangle;
 };
 
 wanderingTriangles.nextTriangleFromRight = function(triangle, triangleSize, dirOdds) {
     var random = Math.random();
-    if (random <  dirOdds[0]) {
+    var chance = dirOdds[0]/2+dirOdds[2]/3;
+    if (random <  chance) {
         triangle.x -= triangleSize;
         triangle.y -= triangleSize;
         triangle.type = 2; // left up
+        return triangle;
     }
-    else if (random < dirOdds[0] + dirOdds[1]) {
+    chance += dirOdds[1]/2+dirOdds[2]/3;
+    if (random < chance) {
         triangle.x -= triangleSize;
         triangle.y += triangleSize;
         triangle.type = 2; // left down
+        return triangle;
     }
-    else if (random < dirOdds[0] + dirOdds[1] + dirOdds[2]) {
+    chance += dirOdds[2]/2+dirOdds[2]/3;
+    if (random < chance) {
         triangle.x -= triangleSize * 2;
         triangle.type = 2; // left level
+        return triangle;
     }
-    else
-        triangle.type = 0; // up
+    
+    triangle.type = 0; // up
     return triangle;
 };
 
