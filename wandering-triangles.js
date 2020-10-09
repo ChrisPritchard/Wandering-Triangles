@@ -4,7 +4,7 @@ let wanderingTriangles = {}
 wanderingTriangles.baseSettings = function() {
     return {
         fadeAlpha: 0.1,
-        framerate: 50,
+        framerate: 18,
         triangleSize: 15,
         triangleDensity: 0.5, // how many triangles per triangleSize columns of the canvas
         chanceOfJump: 0.005,
